@@ -1,0 +1,286 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+.page-header {
+  background-color: rgb(136, 136, 136);
+}
+
+.user-block {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row-reverse;
+  width: 1270px;
+  margin: 0 auto;
+  padding: 0 50px;
+  text-align: center;
+  color: #fff;
+  line-height: 50px;
+}
+
+.user-block a {
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.user-block a:hover {
+  opacity: 0.8;
+}
+
+.user-block a:active {
+  opacity: 0.6;
+}
+
+.page-content {
+  max-width: 1230px;
+  margin: 0 auto;
+  padding: 0 20px;
+  padding-top: 50px;
+}
+
+.request-form__title {
+  margin: 0;
+  margin-bottom: 20px;
+}
+
+.request-form__label {
+  font-size: 20px;
+  display: block;
+  width: 350px;
+  margin-bottom: 20px;
+}
+
+.request-form__label textarea {
+  display: block;
+  margin-top: 5px;
+  font-size: 20px;
+  margin: 0;
+}
+
+.request-form__label input {
+  width: 100%;
+  display: block;
+  margin-top: 5px;
+}
+
+.request-form__label--inline {
+  display: inline;
+  vertical-align: middle;
+}
+
+.request-form__label--full {
+  width: 100%;
+}
+
+.request-form__label--inline input[type="checkbox"] {
+  display: inline-block;
+  width: 20px;
+  margin: 0;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+.btn-submit {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+
+  display: block;
+  padding: 10px;
+  border: 1px solid #000;
+  border-radius: 3px;
+  text-transform: uppercase;
+  transition: all 0.3s;
+}
+
+.btn-submit:hover {
+  cursor: pointer;
+  background-color: rgb(175, 175, 175);
+  color: #fff;
+}
+
+.btn-submit:active {
+  opacity: 0.6;
+}
+
+.request-form__submit {
+  margin-top: 10px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.hidden {
+  position: absolute;
+  clip: rect(0 0 0 0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+}
+
+.login-popup {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  z-index: 101;
+  padding: 30px;
+  width: 300px;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.login-popup__close {
+  font-size: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background-color: transparent;
+
+  position: absolute;
+  top: 5px;
+  right: -30px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.login-popup__close:hover {
+  opacity: 0.8;
+}
+
+.login-popup__close:active {
+  opacity: 0.6;
+}
+
+.login-popup__close::before,
+.login-popup__close::after {
+  content: "";
+  position: absolute;
+  background-color: #fff;
+  transform: rotate(45deg);
+}
+
+.login-popup__close::before {
+  width: 4px;
+  height: 100%;
+  top: 0;
+  left: 8px;
+}
+
+.login-popup__close::after {
+  top: 8px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+}
+
+.login-popup__form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+}
+
+.login-popup__title {
+  margin: 0;
+}
+
+.login-popup__label {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-popup__label input {
+  margin-top: 0.3em;
+  display: block;
+}
+
+.login-popup__submit {
+  margin-top: 0.5em;
+  width: 100%;
+}
+
+.login-popup__register {
+  margin-top: 0.5em;
+  color: #000;
+  transition: all 0.3s;
+}
+
+.login-popup__register:hover {
+  opacity: 0.8;
+}
+
+.login-popup__register:active {
+  opacity: 0.6;
+}
+
+.login-popup__title {
+  text-align: center;
+}
+
+.register {
+  width: 1230px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.register__title {
+  margin-left: 20px;
+}
+
+.register__form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.request-form__sex {
+  font-weight: bold;
+  align-self: flex-start;
+}
+
+.request-form__sex label {
+  display: block;
+  font-weight: normal;
+}
+
+.request-form__sex input {
+  margin-left: 10px;
+}
+
+.register__submit-container {
+  display: flex;
+  justify-content: center;
+  flex-basis: 100%;
+  margin-bottom: 30px;
+}
+
+.register__submit {
+  padding: 15px 40px;
+}
+
+.register__post {
+  margin-left: 20px;
+}
+
+.register__department {
+  margin-left: 20px;
+}
