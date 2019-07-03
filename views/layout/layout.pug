@@ -5,6 +5,8 @@ html
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     meta(http-equiv="X-UA-Compatible", content="ie=edge")
     title #{title}
-    link(rel="stylesheet", href="css/style.css")
+    - const link = styleLink
+    link(rel="stylesheet", href=styleLink)
+    block header
   body
     block content

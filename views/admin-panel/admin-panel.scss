@@ -1,0 +1,37 @@
+.dashboard {
+  &__table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  &__title {
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+  &__item {
+    &-critical {
+      color: red;
+    }
+
+    td {
+      padding: 10px;
+      border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    &-payload {
+      resize: none;
+      width: 100%;
+    }
+
+    &--header {
+      font-weight: bold;
+      
+      th {
+        padding-bottom: 20px;
+      }
+    }
+  }
+}

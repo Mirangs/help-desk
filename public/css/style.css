@@ -4,36 +4,6 @@ body {
   font-family: Arial, sans-serif;
 }
 
-.page-header {
-  background-color: rgb(136, 136, 136);
-}
-
-.user-block {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: row-reverse;
-  width: 1270px;
-  margin: 0 auto;
-  padding: 0 50px;
-  text-align: center;
-  color: #fff;
-  line-height: 50px;
-}
-
-.user-block a {
-  color: #fff;
-  text-decoration: none;
-  transition: all 0.3s;
-}
-
-.user-block a:hover {
-  opacity: 0.8;
-}
-
-.user-block a:active {
-  opacity: 0.6;
-}
-
 .page-content {
   max-width: 1230px;
   margin: 0 auto;
