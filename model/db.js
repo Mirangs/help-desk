@@ -4,6 +4,11 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 let connection = mysql.createConnection(process.env.CONNECTION_STRING);
+connection.on('error', err => {
+  if (err === 'PROTOCOL_CONNECTION_LOST') {
+    connection.connect();
+  }
+});
 
 const getRoles = () => {
   return new Promise((resolve, reject) => {
@@ -49,9 +54,26 @@ const isUserExists = login => {
   });
 }
 
+const addUser = (user) => {
+  const sql = `
+    INSERT INTO user (department_id, first_name, last_name, middle_name, login, password, phone, email, sex, birth)
+    VALUES (${user.department}, '${user['first-name']}', '${user['last-name']}', '${user['middle-name']}', '${user.login}', 
+            '${user.pass}', '${user.phone}', '${user.email}', ${user.sex === 'm' ? 1 : 0}, '${user.birthday}');
+  `;
+  return new Promise((resolve, reject) => {
+    connection.query(sql, (err, rows) => {
+      if (err) {
+        reject(err);
+      }
+      resolve('OK');
+    });
+  });
+}
+
 module.exports = {
   getRoles,
   getDepartments,
   getRequests,
-  isUserExists
+  isUserExists,
+  addUser
 };
