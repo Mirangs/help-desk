@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getRoles, getDepartments, isUserExists, addUser } = require('../model/db');
+const { getRoles, getDepartments, isUserExists, addUser, addUserRole } = require('../model/db');
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -23,10 +23,23 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  console.log(req.body);
   isUserExists(req.body.login).then(isExists => {
     if (!isExists) {
-      addUser(req.body).then(res.redirect('/'));
+      const pass = req.body.pass;
+      let hashedPass;
+      bcrypt.genSalt(saltRounds, (err, salt) => {
+        if (err) console.error(err);
+        bcrypt.hash(pass, salt, (err, pass) => {
+          if (err) console.error(err);
+          hashedPass = pass;
+          addUser({...req.body, pass: hashedPass})
+            .then((userId) => {
+              const postId = req.body.post;
+              addUserRole(userId, postId);
+            })
+            .then(res.redirect('/'));
+        });
+      });
     } else {
       res.render('register/register', {
         title: 'Реєстрація нового користувача',

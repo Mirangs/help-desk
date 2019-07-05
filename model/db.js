@@ -45,11 +45,27 @@ const getRequests = () => {
 
 const isUserExists = login => {
   return new Promise((resolve, reject) => {
-    connection.query(`SELECT EXISTS(SELECT id FROM user WHERE login = '${login}')`, (err, rows) => {
+    connection.query(`SELECT COUNT(id) FROM user WHERE login = '${login}'`, (err, rows) => {
       if (err) {
         reject(err);
+      } else {
+        resolve(!!Object.values(rows[0])[0]);
       }
-      resolve(!!Object.values(rows[0])[0]);
+    });
+  });
+}
+
+const addUserRole = (userId, userRoleId) => {
+  const sql = `
+    INSERT INTO user_user_role (user_id, user_role_id) VALUES (${userId}, ${userRoleId});
+  `;
+  return new Promise((resolve, reject) => {
+    connection.query(sql, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve('OK');
+      }
     });
   });
 }
@@ -64,8 +80,9 @@ const addUser = (user) => {
     connection.query(sql, (err, rows) => {
       if (err) {
         reject(err);
+      } else {
+        resolve(rows.insertId);
       }
-      resolve('OK');
     });
   });
 }
@@ -75,5 +92,6 @@ module.exports = {
   getDepartments,
   getRequests,
   isUserExists,
-  addUser
+  addUser,
+  addUserRole
 };
