@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const connect = require('../model/db');
+const { getRequests } = require('../model/db');
 
 router.get('/', (req, res) => {
-  connect.query('SELECT * FROM request_view').spread(rows => {
+  getRequests().then(rows => {
     rows.forEach(row => {
       row.date = row.date.toLocaleDateString('uk-UA');
     });

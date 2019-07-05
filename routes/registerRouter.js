@@ -1,30 +1,38 @@
 const express = require('express');
 const router = express.Router();
-const connection = require('../model/db');
+const { getRoles, getDepartments, isUserExists } = require('../model/db');
+
+const departmentPromise = getDepartments().then(rows => departmentsList = rows);
+const rolesPromise = getRoles().then(rows => rolesList = rows);
+
+let departmentsList, rolesList;
 
 router.get('/', (req, res) => {
-  let departmentsList, postsList;
-
-  const departmentPromise = connection
-    .query('SELECT * FROM department')
-    .spread(rows => (departmentsList = rows));
-  const postsPromise = connection
-    .query('SELECT * FROM user_role')
-    .spread(rows => (postsList = rows));
-
-  Promise.all([departmentPromise, postsPromise]).then(() => {
+  Promise.all([departmentPromise, rolesPromise]).then(() => {
     res.render('register/register', {
       title: 'Реєстрація нового користувача',
       styleLink: 'css/style.css',
       departmentsList,
-      postsList
+      rolesList
     });
   });
 });
 
 router.post('/', (req, res) => {
   console.log(req.body);
-  res.redirect('/');
+  isUserExists(req.body.login).then(isExists => {
+    if (!isExists) {
+      res.redirect('/');
+    } else {
+      res.render('register/register', {
+        title: 'Реєстрація нового користувача',
+        styleLink: 'css/style.css',
+        departmentsList,
+        rolesList,
+        error: 'Користувач з таким логіном вже існує'
+      });
+    }
+  }).catch(err => console.log(err));
 });
 
 module.exports = router;

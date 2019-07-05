@@ -40,7 +40,7 @@ block content
       label.request-form__label
         | Посада
         select.register__post(name='post')
-          each item in postsList
+          each item in rolesList
             option(value=item.id)= item.name
       label.request-form__label
         | Відділ
@@ -50,12 +50,14 @@ block content
       p.request-form__sex
         | Стать
         label
-          input(type='radio', name='sex', value='f' checked)
+          input(type='radio', name='sex', value='m' checked)
           |             Ч
         label
-          input(type='radio', name='sex', value='m')
+          input(type='radio', name='sex', value='f')
           |             Ж
       .register__submit-container
         button.btn-submit.register__submit(type='submit')
           | Зареєструватися
+      if error
+        p.register__error= error
     script(src='js/register.js')

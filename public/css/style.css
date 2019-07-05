@@ -222,6 +222,10 @@ body {
   align-items: center;
 }
 
+.register__error {
+  color: red;
+}
+
 .request-form__sex {
   font-weight: bold;
   align-self: flex-start;

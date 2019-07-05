@@ -4,7 +4,6 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
 const bodyParser = require('body-parser');
-const connection = require('./model/db');
 
 const rootRouter = require('./routes/rootRouter');
 const registerRouter = require('./routes/registerRouter');
