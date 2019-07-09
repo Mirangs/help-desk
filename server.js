@@ -17,6 +17,7 @@ const rootRouter = require('./routes/rootRouter');
 const registerRouter = require('./routes/registerRouter');
 const userDeskRouter = require('./routes/userDeskRouter');
 const adminPanelRouter = require('./routes/adminPanelRouter');
+const logoutRouter = require('./routes/logoutRouter');
 
 dotenv.config();
 
@@ -46,6 +47,7 @@ app.use('/', rootRouter);
 app.use('/register', registerRouter);
 app.use('/user-desk', userDeskRouter);
 app.use('/admin-panel', adminPanelRouter);
+app.use('/logout', logoutRouter);
 
 app.listen(process.env.PORT, () =>
   console.log(`Server is listening port ${process.env.PORT}`)
