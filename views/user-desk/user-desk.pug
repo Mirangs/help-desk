@@ -6,14 +6,17 @@ block header
 block content
   header.page-header
     section.user-block
-      a.user-block__login(href='/') Вийти
+      span.user-block__user= user.login
+      a.user-block__login(href='/logout') Вийти
   main.page-content
     form.request-form(method='POST')
       h2.request-form__title Залиште свою заявку тут
       label.request-form__label.request-form__label--full
-        textarea.request-form__problem-field(rows='25', cols='100', placeholder='Опишіть вашу проблему', name='payload')
+        textarea.request-form__problem-field(rows='25', cols='100', placeholder='Опишіть вашу проблему', name='payload', required)
       label.request-form__label.request-form__label--inline
         | Критична
         input(type='checkbox', name='critical')
       button.btn-submit.request-form__submit(type='submit')
         | Відправити
+      if message
+        p.request-form__message= message

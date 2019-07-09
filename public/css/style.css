@@ -53,6 +53,10 @@ body {
   vertical-align: middle;
 }
 
+.request-form__message {
+  color: 	#228B22;
+}
+
 .btn-submit {
   margin: 0;
   padding: 0;
@@ -203,6 +207,10 @@ body {
 
 .login-popup__title {
   text-align: center;
+}
+
+.login-popup__message {
+  color: red;
 }
 
 .register {

@@ -1,21 +1,44 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 
 router.get('/', (req, res) => {
+  if (req.isAuthenticated()) {
+    req.logout();
+  }
   return res.render('index/index', {
     title: 'Вхід в систему',
     styleLink: 'css/style.css'
   });
 });
 
-router.post('/', (req, res) => {
-  if (req.body.login === 'Admin') {
-    res.redirect('/admin-panel');
-  } else if (req.body.login === 'Client') {
-    res.redirect('/user-desk');
-  } else {
-    res.redirect('performer-tasks');
+router.post('/',
+  (req, res, next) => {
+    passport.authenticate('local', (err, user, message) => {
+      if (err) {
+        return res.send(err);
+      }
+      if (message) {
+        return res.render('index/index', {
+          title: 'Вхід в систему',
+          styleLink: 'css/style.css',
+          message: message.error
+        });
+      }
+
+      req.login(user, (err) => {
+        if (err) {
+          return next(err);
+        }
+        if (user.department_id === 1) {
+          res.redirect('/admin-panel');
+        }
+        if (user.department_id === 3) {
+          res.redirect('/user-desk');
+        }
+      });
+    })(req, res, next);
   }
-});
+);
 
 module.exports = router;

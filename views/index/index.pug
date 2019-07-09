@@ -3,7 +3,7 @@ extends ../layout/layout.pug
 block content
   section.login-popup
       h2.login-popup__title Авторизація
-      form.login-popup__form(method='POST')
+      form.login-popup__form(action="/", method='POST')
         label.login-popup__label Логін
           input(
             type='text'
@@ -22,3 +22,5 @@ block content
           | Запам`ятати мене
         button.btn-submit.login-popup__submit(type='submit') Увійти
         a.login-popup__register(href='/register') Зареєструватися
+        if message
+          p.login-popup__message= message

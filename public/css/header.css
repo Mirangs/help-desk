@@ -11,13 +11,16 @@ body {
 .user-block {
   box-sizing: border-box;
   display: flex;
-  flex-direction: row-reverse;
   width: 1270px;
   margin: 0 auto;
   padding: 0 50px;
   text-align: center;
   color: #fff;
   line-height: 50px;
+}
+
+.user-block__login {
+  margin-left: auto;
 }
 
 .user-block a {

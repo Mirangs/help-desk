@@ -5,7 +5,7 @@ dotenv.config();
 
 let connection = mysql.createConnection(process.env.CONNECTION_STRING);
 connection.on('error', err => {
-  if (err === 'PROTOCOL_CONNECTION_LOST') {
+  if (err === 'PROTOCOL_CONNECTION_LOST' || !err.fatal) {
     connection.connect();
   }
 });
@@ -56,14 +56,17 @@ const isUserExists = login => {
 }
 
 const addUserRole = (userId, userRoleId) => {
+  connection.connect();
   const sql = `
     INSERT INTO user_user_role (user_id, user_role_id) VALUES (${userId}, ${userRoleId});
   `;
   return new Promise((resolve, reject) => {
     connection.query(sql, (err, rows) => {
       if (err) {
+        connection.end();
         reject(err);
       } else {
+        connection.end();
         resolve('OK');
       }
     });
@@ -87,11 +90,31 @@ const addUser = (user) => {
   });
 }
 
+const addIssue = issue => {
+  let sql = `
+    INSERT INTO request (creator_id, req_status_id, performer_id, date, payload, critical)
+    VALUES (${issue.creator_id}, ${issue.req_status_id}, ${issue.performer_id}, NOW(), ??, ${issue.critical});
+  `;
+  const inserts = [issue.payload];
+  sql = mysql.format(sql, inserts);
+  return new Promise((resolve, reject) => {
+    connection.query(sql, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows.insertId);
+      }
+    });
+  });
+}
+
 module.exports = {
+  connection,
   getRoles,
   getDepartments,
   getRequests,
   isUserExists,
   addUser,
-  addUserRole
+  addUserRole,
+  addIssue
 };
