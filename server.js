@@ -13,6 +13,7 @@ const redisClient = require('redis').createClient({
 });
 const RedisStore = require('connect-redis')(session);
 
+//Routers
 const rootRouter = require('./routes/rootRouter');
 const registerRouter = require('./routes/registerRouter');
 const userDeskRouter = require('./routes/userDeskRouter');
@@ -21,7 +22,7 @@ const logoutRouter = require('./routes/logoutRouter');
 
 dotenv.config();
 
-app.use(cors());
+//Auth session
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -40,9 +41,11 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+//Template engine
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
+//Routes
 app.use('/', rootRouter);
 app.use('/register', registerRouter);
 app.use('/user-desk', userDeskRouter);
