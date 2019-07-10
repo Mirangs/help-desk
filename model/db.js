@@ -108,6 +108,42 @@ const addIssue = issue => {
   });
 }
 
+const getTasksByUser = id => {
+  let sql = `
+    SELECT * FROM request_view WHERE performer_id = ? AND req_status_id = 4
+  `;
+  const inserts = [id];
+  sql = mysql.format(sql, inserts);
+
+  return new Promise((resolve, reject) => {
+    connection.query(sql, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
+
+const getUserByRole = roleId => {
+  let sql = `
+    SELECT first_name, last_name FROM user WHERE department_id = ?
+  `;
+  const inserts = [roleId];
+  sql = mysql.format(sql, inserts);
+
+  return new Promise((resolve, reject) => {
+    connection.query(sql, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
+
 module.exports = {
   connection,
   getRoles,
@@ -116,5 +152,7 @@ module.exports = {
   isUserExists,
   addUser,
   addUserRole,
-  addIssue
+  addIssue,
+  getTasksByUser,
+  getUserByRole
 };

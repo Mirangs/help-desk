@@ -1,0 +1,41 @@
+extends ../layout/layout.pug
+
+block header
+  link(rel="stylesheet", href="css/header.css")
+
+block content
+  header.page-header
+    section.user-block
+      span.user-block__user= user.login
+      a.user-block__login(href='/logout') Вийти
+  main.page-content
+    section.dashboard
+      h2.dashboard__title Список заявок
+      table.dashboard__table
+        thead
+          tr.dashboard__item.dashboard__item--header
+            th id
+            th Користувач
+            th Статус заяви
+            th Дата
+            th Проблема
+            th Критичність
+        -
+        tbody
+          each item in tasksList
+            tr.dashboard__item
+              td
+                span.dashboard__item-id= item.id
+              td.dashboard__item-creator-cell
+                span.dashboard__item-creator= item.creator + ', ' + item.department + ', ' + item.phone + ', ' + item.email
+              td
+                span.dashboard__item-status= item.req_status
+              td
+                span.dashboard__item-date= item.date
+              td
+                textarea.dashboard__item-payload(readonly)= item.payload
+              td
+                if item.critical === 1
+                  span.dashboard__item-critical Критична
+                else
+                  span.dashboard__item-regular Звичайна

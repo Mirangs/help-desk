@@ -15,6 +15,10 @@
       color: red;
     }
 
+    &-creator-cell {
+      max-width: 200px;
+    }
+
     td {
       padding: 10px;
       border-bottom: 2px solid rgba(0, 0, 0, 0.2);

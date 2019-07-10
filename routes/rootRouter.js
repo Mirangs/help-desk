@@ -7,6 +7,9 @@ router.get('/', (req, res) => {
     if (req.user.department_id === 1) {
       return res.redirect('/admin-panel');
     }
+    if (req.user.department_id === 2) {
+      return res.redirect('/performer-desk');
+    }
     if (req.user.department_id === 3) {
       return res.redirect('/user-desk');
     }
@@ -37,6 +40,9 @@ router.post('/',
         }
         if (user.department_id === 1) {
           res.redirect('/admin-panel');
+        }
+        if (req.user.department_id === 2) {
+          return res.redirect('/performer-desk');
         }
         if (user.department_id === 3) {
           res.redirect('/user-desk');
