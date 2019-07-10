@@ -5,7 +5,7 @@ const { mustAuthenticated } = require('../middleware/passport');
 
 router.get('/', mustAuthenticated, (req, res) => {
   const requestsPromise = getRequests();
-  const performersPromise = getUsersByRole(2);
+  const performersPromise = getUsersByRole(5);
   const requestStatusesPromise = getRequestStatuses();
   
   Promise.all([requestsPromise, performersPromise, requestStatusesPromise]).then(([ requests, performers, statuses ]) => {
