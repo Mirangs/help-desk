@@ -30,11 +30,11 @@ block content
               td
                 span.dashboard__item-creator= item.creator
               td
-                select.dashboard__item-status
+                select.dashboard__item-status(name="request-status")
                   each statusItem in statuses
-                    option(value=item.req_status_id, selected = statusItem.id === item.req_status_id)= statusItem.name
+                    option(value=statusItem.id, selected = statusItem.id === item.req_status_id)= statusItem.name
               td
-                select.dashboard__item-performer
+                select.dashboard__item-performer(name="performer")
                   option(value=0, selected = item.performer_first_name === null) Не назначено
                   each performerOption in performers
                     option(value=performerOption.id, selected = performerOption.id === item.performer_id)= performerOption.first_name + ' ' + performerOption.last_name
@@ -47,3 +47,6 @@ block content
                   span.dashboard__item-critical Критична
                 else
                   span.dashboard__item-regular Звичайна
+      if (message)
+        p.dashboard__message= message
+  script(src="js/admin-panel.js")

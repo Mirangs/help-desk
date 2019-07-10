@@ -13,6 +13,10 @@ const redisClient = require('redis').createClient({
 });
 const RedisStore = require('connect-redis')(session);
 
+const fetch = require('node-fetch');
+const Bluebird = require('bluebird');
+fetch.Promise = Bluebird;
+
 //Routers
 const rootRouter = require('./routes/rootRouter');
 const registerRouter = require('./routes/registerRouter');
@@ -28,8 +32,8 @@ app.use(cors());
 
 //Auth session
 app.use(cookieParser());
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use(session({ 
   store: new RedisStore({client: redisClient}),
@@ -44,6 +48,7 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+require('./config/passport');
 
 //Template engine
 app.set('view engine', 'pug');

@@ -21,10 +21,11 @@ router.get('/', (req, res) => {
 });
 
 router.post('/',
-  (req, res, next) => {
+  (req, res) => {
     passport.authenticate('local', (err, user, message) => {
       if (err) {
-        return res.send(err);
+        console.error(err);
+        return res.status(500).send(err);
       }
       if (message) {
         return res.render('index/index', {
@@ -36,19 +37,18 @@ router.post('/',
 
       req.login(user, (err) => {
         if (err) {
-          return next(err);
+          console.error(err);
+          res.status(500).send(err);
         }
         if (user.department_id === 1) {
-          res.redirect('/admin-panel');
+          return res.redirect('/admin-panel');
         }
-        if (req.user.department_id === 2) {
+        if (user.department_id === 5) {
           return res.redirect('/performer-desk');
         }
-        if (user.department_id === 3) {
-          res.redirect('/user-desk');
-        }
+        return res.redirect('/user-desk');
       });
-    })(req, res, next);
+    })(req, res);
   }
 );
 

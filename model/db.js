@@ -2,24 +2,18 @@ const mysql = require('mysql');
 const dotenv = require('dotenv');
 
 dotenv.config();
-
-let connection = mysql.createConnection(process.env.CONNECTION_STRING);
-connection.on('error', err => {
-  if (err === 'PROTOCOL_CONNECTION_LOST' || !err.fatal) {
-    connection.connect();
-  }
-});
+const pool = mysql.createPool(process.env.CONNECTION_STRING);
 
 const toMySQLDate = list => {
   return list.map(row => ({
     ...row,
-    date: row.date.toLocaleDateString('uk-UA')
+    date: row.date.toISOString().slice(0, 10)
   }));
 }
 
 const getRoles = () => {
   return new Promise((resolve, reject) => {
-    connection.query('SELECT * FROM user_role', (err, rows) => {
+    pool.query('SELECT * FROM user_role', (err, rows) => {
       if (err) {
         return reject(err);
       }
@@ -30,7 +24,7 @@ const getRoles = () => {
 
 const getDepartments = () => {
   return new Promise((resolve, reject) => {
-    connection.query('SELECT * FROM department', (err, rows) => {
+    pool.query('SELECT * FROM department', (err, rows) => {
       if (err) {
         return reject(err);
       }
@@ -41,7 +35,7 @@ const getDepartments = () => {
 
 const getRequests = () => {
   return new Promise((resolve, reject) => {
-    connection.query('SELECT * FROM request_view ORDER BY date DESC', (err, rows) => {
+    pool.query('SELECT * FROM request_view ORDER BY date DESC', (err, rows) => {
       if (err) {
         return reject(err);
       }
@@ -52,7 +46,7 @@ const getRequests = () => {
 
 const isUserExists = login => {
   return new Promise((resolve, reject) => {
-    connection.query(`SELECT COUNT(id) FROM user WHERE login = '${login}'`, (err, rows) => {
+    pool.query(`SELECT COUNT(id) FROM user WHERE login = '${login}'`, (err, rows) => {
       if (err) {
         reject(err);
       } else {
@@ -63,17 +57,14 @@ const isUserExists = login => {
 }
 
 const addUserRole = (userId, userRoleId) => {
-  connection.connect();
   const sql = `
     INSERT INTO user_user_role (user_id, user_role_id) VALUES (${userId}, ${userRoleId});
   `;
   return new Promise((resolve, reject) => {
-    connection.query(sql, (err, rows) => {
+    pool.query(sql, (err, rows) => {
       if (err) {
-        connection.end();
         reject(err);
       } else {
-        connection.end();
         resolve('OK');
       }
     });
@@ -87,7 +78,7 @@ const addUser = (user) => {
             '${user.pass}', '${user.phone}', '${user.email}', ${user.sex === 'm' ? 1 : 0}, '${user.birthday}');
   `;
   return new Promise((resolve, reject) => {
-    connection.query(sql, (err, rows) => {
+    pool.query(sql, (err, rows) => {
       if (err) {
         reject(err);
       } else {
@@ -105,7 +96,7 @@ const addIssue = issue => {
   const inserts = [issue.creator_id, issue.req_status_id, issue.performer_id, issue.payload, issue.critical];
   sql = mysql.format(sql, inserts);
   return new Promise((resolve, reject) => {
-    connection.query(sql, (err, rows) => {
+    pool.query(sql, (err, rows) => {
       if (err) {
         reject(err);
       } else {
@@ -117,13 +108,13 @@ const addIssue = issue => {
 
 const getTasksByUser = id => {
   let sql = `
-    SELECT * FROM request_view WHERE performer_id = ? AND req_status_id = 4
+    SELECT * FROM request_view WHERE performer_id = ?
   `;
   const inserts = [id];
   sql = mysql.format(sql, inserts);
 
   return new Promise((resolve, reject) => {
-    connection.query(sql, (err, rows) => {
+    pool.query(sql, (err, rows) => {
       if (err) {
         reject(err);
       } else {
@@ -141,7 +132,7 @@ const getUsersByRole = roleId => {
   sql = mysql.format(sql, inserts);
 
   return new Promise((resolve, reject) => {
-    connection.query(sql, (err, rows) => {
+    pool.query(sql, (err, rows) => {
       if (err) {
         reject(err);
       } else {
@@ -153,7 +144,7 @@ const getUsersByRole = roleId => {
 
 const getRequestStatuses = () => {
   return new Promise((resolve, reject) => {
-    connection.query('SELECT * FROM request_status', (err, rows) => {
+    pool.query('SELECT * FROM request_status', (err, rows) => {
       if (err) {
         reject(err);
       } else {
@@ -163,8 +154,76 @@ const getRequestStatuses = () => {
   });
 }
 
+const updateIssue = payload => {
+  let sql;
+  if (Object.keys(payload).includes('performer')) {
+    if (payload.performer === '0') {
+      sql = `
+      UPDATE request SET performer_id = NULL WHERE id = '${payload.id}';
+      `;
+    } else {
+      sql = `
+        UPDATE request SET performer_id = ? WHERE id = ?
+      `;
+      const inserts = [payload.performer, payload.id];
+      sql = mysql.format(sql, inserts);
+    }
+  } else if (Object.keys(payload).includes('request-status')) {
+    sql = `
+      UPDATE request SET req_status_id = ? WHERE id = ?
+    `;
+    const inserts = [payload['request-status'], payload.id];
+    sql = mysql.format(sql, inserts);
+  }
+
+  return new Promise((resolve, reject) => {
+    pool.query(sql, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
+const getUserByLogin = login => {
+  let sql = `
+    SELECT * FROM user WHERE login = ?
+  `;
+  const inserts = [login];
+  sql = mysql.format(sql, inserts);
+  return new Promise((resolve, reject) => {
+    pool.query(sql, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows[0]);
+      }
+    });
+  });
+}
+
+const getUserById = id => {
+  let sql = `
+    SELECT * FROM user WHERE id = ?
+  `
+  const inserts = [id];
+  sql = mysql.format(sql, inserts);
+
+  return new Promise((resolve, reject) => {
+    pool.query(sql, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows[0]);
+      }
+    });
+  });
+}
+
 module.exports = {
-  connection,
+  pool,
   getRoles,
   getDepartments,
   getRequests,
@@ -174,5 +233,8 @@ module.exports = {
   addIssue,
   getTasksByUser,
   getUsersByRole,
-  getRequestStatuses
+  getRequestStatuses,
+  updateIssue,
+  getUserByLogin,
+  getUserById
 };

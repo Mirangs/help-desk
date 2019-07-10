@@ -29,7 +29,7 @@ block content
               td.dashboard__item-creator-cell
                 span.dashboard__item-creator= item.creator + ', ' + item.department + ', ' + item.phone + ', ' + item.email
               td
-                select.dashboard__item-status
+                select.dashboard__item-status(name="request-status")
                   each statusItem in statuses
                     option(value=item.req_status_id, selected = statusItem.id === item.req_status_id)= statusItem.name
               td
@@ -41,3 +41,4 @@ block content
                   span.dashboard__item-critical Критична
                 else
                   span.dashboard__item-regular Звичайна
+  script(src="js/admin-panel.js")

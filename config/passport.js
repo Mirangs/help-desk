@@ -1,5 +1,5 @@
 const LocalStrategy = require('passport-local').Strategy;
-const { connection } = require('../model/db');
+const { getUserByLogin, getUserById } = require('../model/db');
 const bcrypt = require('bcrypt');
 
 module.exports = function(passport) {
@@ -8,35 +8,35 @@ module.exports = function(passport) {
   });
   
   passport.deserializeUser(function(id, done) {
-    connection.query(`SELECT * FROM user WHERE id = ${id}`, (err, rows) => {
-      if (err) {
-        return done(err, null);
-      }
-      
-      done(null, rows[0]);
-    });
+    getUserById(id)
+      .then(user => done(null, user))
+      .catch(err => {
+        console.error(err);
+        done(err, null);
+      });
   });
   
-  passport.use(new LocalStrategy({
+  passport.use('local', new LocalStrategy({
     usernameField: 'login',
     passwordField: 'pass',
   },
   (login, password, done) => {
-    connection.query(`SELECT * FROM user WHERE login = '${login}'`, (err, rows) => {
-      if (err) {
-        return done(err);
-      }
-  
-      if (!rows.length) {
-        return done(null, false, { error: 'No user found' });
-      }
-  
-      if (!(bcrypt.compareSync(password, rows[0].password))) {
-        return done(null, false, { error: 'Email or password is invalid' });
-      }
+    getUserByLogin(login)
+      .then(user => {
+        if (!user) {
+          return done(null, false, { error: 'No user found' });
+        }
 
-      return done(null, rows[0]);
-    });
+        if (!(bcrypt.compareSync(password, user.password))) {
+          return done(null, false, { error: 'Email or password is invalid' });
+        }
+
+        return done(null, user);
+      })
+      .catch(err => {
+        console.error(err);
+        done(err);
+      });
   }
   ));
 };
