@@ -1,19 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const { mustAuthenticated } = require('../middleware/passport');
-const { getTasksByUser } = require('../model/db');
+const { getTasksByUser, getRequestStatuses } = require('../model/db');
 
 router.get('/', mustAuthenticated, (req, res) => {
-  getTasksByUser(req.user.id)
-    .then(tasks => {
-      console.log(tasks);
-      tasks.forEach(row => {
-        row.date = row.date.toLocaleDateString('uk-UA');
-      });
+  const requestStatusesPromise = getRequestStatuses();
+  const tasksByUserPromise = getTasksByUser(req.user.id);
+
+  Promise.all([requestStatusesPromise, tasksByUserPromise])
+    .then(([ statuses, tasksList ]) => {
       return res.render('performer-desk/performer-desk', {
         title: 'Дошка виконавця',
         styleLink: 'css/admin-panel.min.css',
-        tasksList: tasks,
+        tasksList,
+        statuses,
         user: req.user
       });
     })

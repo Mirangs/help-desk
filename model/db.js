@@ -147,6 +147,18 @@ const getUsersByRole = roleId => {
   });
 }
 
+const getRequestStatuses = () => {
+  return new Promise((resolve, reject) => {
+    connection.query('SELECT * FROM request_status', (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
+
 module.exports = {
   connection,
   getRoles,
@@ -157,5 +169,6 @@ module.exports = {
   addUserRole,
   addIssue,
   getTasksByUser,
-  getUsersByRole
+  getUsersByRole,
+  getRequestStatuses
 };
