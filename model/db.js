@@ -93,9 +93,9 @@ const addUser = (user) => {
 const addIssue = issue => {
   let sql = `
     INSERT INTO request (creator_id, req_status_id, performer_id, date, payload, critical)
-    VALUES (${issue.creator_id}, ${issue.req_status_id}, ${issue.performer_id}, NOW(), ??, ${issue.critical});
+    VALUES (?, ?, ?, NOW(), ?, ?);
   `;
-  const inserts = [issue.payload];
+  const inserts = [issue.creator_id, issue.req_status_id, issue.performer_id, issue.payload, issue.critical];
   sql = mysql.format(sql, inserts);
   return new Promise((resolve, reject) => {
     connection.query(sql, (err, rows) => {

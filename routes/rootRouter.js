@@ -4,7 +4,12 @@ const passport = require('passport');
 
 router.get('/', (req, res) => {
   if (req.isAuthenticated()) {
-    req.logout();
+    if (req.user.department_id === 1) {
+      return res.redirect('/admin-panel');
+    }
+    if (req.user.department_id === 3) {
+      return res.redirect('/user-desk');
+    }
   }
   return res.render('index/index', {
     title: 'Вхід в систему',
