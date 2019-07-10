@@ -10,6 +10,13 @@ connection.on('error', err => {
   }
 });
 
+const toMySQLDate = list => {
+  return list.map(row => ({
+    ...row,
+    date: row.date.toLocaleDateString('uk-UA')
+  }));
+}
+
 const getRoles = () => {
   return new Promise((resolve, reject) => {
     connection.query('SELECT * FROM user_role', (err, rows) => {
@@ -34,14 +41,11 @@ const getDepartments = () => {
 
 const getRequests = () => {
   return new Promise((resolve, reject) => {
-    connection.query('SELECT * FROM request_view', (err, rows) => {
+    connection.query('SELECT * FROM request_view ORDER BY date DESC', (err, rows) => {
       if (err) {
         return reject(err);
       }
-      rows.forEach(row => {
-        row.date = row.date.toLocaleDateString('uk-UA');
-      });
-      resolve(rows);
+      resolve(toMySQLDate(rows));
     });
   })
 }
@@ -123,7 +127,7 @@ const getTasksByUser = id => {
       if (err) {
         reject(err);
       } else {
-        resolve(rows);
+        resolve(toMySQLDate(rows));
       }
     });
   });

@@ -23,6 +23,9 @@ const performerDeskRouter = require('./routes/performerDeskRouter');
 
 dotenv.config();
 
+//For fetch requests
+app.use(cors());
+
 //Auth session
 app.use(cookieParser());
 app.use(bodyParser.json());

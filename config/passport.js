@@ -10,7 +10,7 @@ module.exports = function(passport) {
   passport.deserializeUser(function(id, done) {
     connection.query(`SELECT * FROM user WHERE id = ${id}`, (err, rows) => {
       if (err) {
-        done(err, null);
+        return done(err, null);
       }
       
       done(null, rows[0]);
