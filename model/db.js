@@ -38,6 +38,9 @@ const getRequests = () => {
       if (err) {
         return reject(err);
       }
+      rows.forEach(row => {
+        row.date = row.date.toLocaleDateString('uk-UA');
+      });
       resolve(rows);
     });
   })
@@ -126,9 +129,9 @@ const getTasksByUser = id => {
   });
 }
 
-const getUserByRole = roleId => {
+const getUsersByRole = roleId => {
   let sql = `
-    SELECT first_name, last_name FROM user WHERE department_id = ?
+    SELECT id, first_name, last_name FROM user WHERE department_id = ?
   `;
   const inserts = [roleId];
   sql = mysql.format(sql, inserts);
@@ -154,5 +157,5 @@ module.exports = {
   addUserRole,
   addIssue,
   getTasksByUser,
-  getUserByRole
+  getUsersByRole
 };

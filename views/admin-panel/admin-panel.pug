@@ -32,10 +32,10 @@ block content
               td
                 span.dashboard__item-status= item.req_status
               td
-                if item.performer === null
-                  span.dashboard__item-performer Не назначено
-                else
-                  span.dashboard__item-performer= item.performer
+                select.dashboard__item-performer
+                  option(value=0, selected = item.performer_first_name === null) Не назначено
+                  each performerOption in performers
+                    option(value=performerOption.id, selected = performerOption.id === item.performer_id)= performerOption.first_name + ' ' + performerOption.last_name
               td
                 span.dashboard__item-date= item.date
               td
