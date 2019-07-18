@@ -24,11 +24,11 @@ module.exports = function(passport) {
     getUserByLogin(login)
       .then(user => {
         if (!user) {
-          return done(null, false, { error: 'No user found' });
+          return done(null, false, { error: 'Користувач не знайдений' });
         }
 
         if (!(bcrypt.compareSync(password, user.password))) {
-          return done(null, false, { error: 'Email or password is invalid' });
+          return done(null, false, { error: 'Невірниа почта або пароль' });
         }
 
         return done(null, user);
