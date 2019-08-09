@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { mustAuthenticated } = require('../middleware/passport');
-const { addIssue } = require('../model/db');
+const { addIssue, getRequestsByLogin } = require('../model/db');
 
 router.get('/', mustAuthenticated, (req, res) => {
+  console.log(req.user);
   return res.render('user-desk/user-desk', {
     title: 'Дошка заявок',
     styleLink: 'css/style.css',
@@ -26,6 +27,17 @@ router.post('/', mustAuthenticated, (req, res) => {
       message: `Заявка ${issueId} успішно відправлена`
     }))
     .catch(err => console.error(err));
-})
+});
+
+router.get('/:login/requests', mustAuthenticated, (req, res) => {
+  getRequestsByLogin(req.user.login).then(requests => {
+    return res.render('user-desk/requests', {
+      title: 'Заяви',
+      styleLink: '/css/admin-panel.min.css',
+      login: req.user.login,
+      tasksList: requests
+    });
+  });
+});
 
 module.exports = router;

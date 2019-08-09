@@ -18,7 +18,7 @@ adminTable.addEventListener('change', evt => {
   }
   fetchOptions.body = JSON.stringify(payload);
   
-  fetch('/admin-panel', fetchOptions)
+  fetch('/performer-desk', fetchOptions)
     .then(res => res.json())
     .then(({ id }) => {
       const message = document.createElement('p');

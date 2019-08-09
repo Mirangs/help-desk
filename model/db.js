@@ -168,7 +168,7 @@ const updateIssue = payload => {
       const inserts = [payload.performer, payload.id];
       sql = mysql.format(sql, inserts);
     }
-  } else if (Object.keys(payload).includes('request-status')) {
+  } if (Object.keys(payload).includes('request-status')) {
     sql = `
       UPDATE request SET req_status_id = ? WHERE id = ?
     `;
@@ -222,6 +222,25 @@ const getUserById = id => {
   });
 }
 
+const getRequestsByLogin = login => {
+  let sql = `
+    SELECT id, req_status, performer_first_name, performer_last_name, date, payload, critical FROM request_view r WHERE login = ?
+  `;
+
+  const inserts = [login];
+  sql = mysql.format(sql, inserts);
+
+  return new Promise((resolve, reject) => {
+    pool.query(sql, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(toMySQLDate(rows));
+      }
+    });
+  });
+}
+
 module.exports = {
   pool,
   getRoles,
@@ -236,5 +255,6 @@ module.exports = {
   getRequestStatuses,
   updateIssue,
   getUserByLogin,
-  getUserById
+  getUserById,
+  getRequestsByLogin
 };

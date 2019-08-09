@@ -47,6 +47,10 @@ block content
                   span.dashboard__item-critical Критична
                 else
                   span.dashboard__item-regular Звичайна
+              td
+                div.dashboard__controls
+                  button.dashboard__save Зберегти
+                  button.dashboard__cancel Відміна
       if (message)
         p.dashboard__message= message
   script(src="js/admin-panel.js")

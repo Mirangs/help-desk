@@ -1,12 +1,18 @@
 extends ../layout/layout.pug
 
 block header
-  link(rel="stylesheet", href="css/header.css")
+  link(rel="stylesheet", href="/css/header.css")
 
 block content
   header.page-header
     section.user-block
-      span.user-block__user= user.login
+      span.user-block__user= login
+      nav.page-nav
+      ul.page-nav__list
+        li.page-nav__item
+            a.page-nav__link(href=`/user-desk`) Головна
+        li.page-nav__item
+          a.page-nav__link.page-nav__link--active Заявки
       a.user-block__login(href='/logout') Вийти
   main.page-content
     section.dashboard
@@ -15,8 +21,8 @@ block content
         thead
           tr.dashboard__item.dashboard__item--header
             th id
-            th Користувач
             th Статус заяви
+            th Виконавець
             th Дата
             th Проблема
             th Критичність
@@ -26,12 +32,10 @@ block content
             tr.dashboard__item
               td
                 span.dashboard__item-id= item.id
-              td.dashboard__item-creator-cell
-                span.dashboard__item-creator= item.creator + ', ' + item.department + ', ' + item.phone + ', ' + item.email
               td
-                select.dashboard__item-status(name="request-status")
-                  each statusItem in statuses
-                    option(value=item.req_status_id, selected = statusItem.id === item.req_status_id)= statusItem.name
+                span.dashboard__item-status= item.req_status
+              td
+                span.dashboard__item-performer= `${item.performer_first_name} ${item.performer_last_name}`
               td
                 span.dashboard__item-date= item.date
               td
@@ -41,4 +45,3 @@ block content
                   span.dashboard__item-critical Критична
                 else
                   span.dashboard__item-regular Звичайна
-  script(src="js/performer-desk.js")

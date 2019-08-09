@@ -28,7 +28,7 @@ module.exports = function(passport) {
         }
 
         if (!(bcrypt.compareSync(password, user.password))) {
-          return done(null, false, { error: 'Невірниа почта або пароль' });
+          return done(null, false, { error: 'Невірна почта або пароль' });
         }
 
         return done(null, user);

@@ -27,6 +27,7 @@ router.post('/', mustAuthenticated, (req, res) => {
         id: req.body.id
       });
     })
+    .catch(err => console.log(err))
 });
 
 module.exports = router;

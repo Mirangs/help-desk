@@ -7,6 +7,12 @@ block content
   header.page-header
     section.user-block
       span.user-block__user= user.login
+      nav.page-nav
+      ul.page-nav__list
+        li.page-nav__item
+            a.page-nav__link.page-nav__link--active Головна
+        li.page-nav__item
+          a.page-nav__link(href=`user-desk/${user.login}/requests`) Заявки
       a.user-block__login(href='/logout') Вийти
   main.page-content
     form.request-form(method='POST')
