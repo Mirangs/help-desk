@@ -4,7 +4,6 @@ const { mustAuthenticated } = require('../middleware/passport');
 const { addIssue, getRequestsByLogin } = require('../model/db');
 
 router.get('/', mustAuthenticated, (req, res) => {
-  console.log(req.user);
   return res.render('user-desk/user-desk', {
     title: 'Дошка заявок',
     styleLink: 'css/style.css',

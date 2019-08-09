@@ -224,7 +224,7 @@ const getUserById = id => {
 
 const getRequestsByLogin = login => {
   let sql = `
-    SELECT id, req_status, performer_first_name, performer_last_name, date, payload, critical FROM request_view r WHERE login = ?
+    SELECT id, req_status, performer_first_name, performer_last_name, performer_phone, date, payload, critical FROM request_view r WHERE login = ?
   `;
 
   const inserts = [login];
